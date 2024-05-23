@@ -1,5 +1,5 @@
 /* Only apply CSS to XUL windows */
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+/* @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"); */
 
 /********** Tabs **********/
 
@@ -48,7 +48,7 @@
     /* Causes the scrollbar to appear when overflowing */
     overflow-y: auto !important;
     scrollbar-width: thin !important;
-    scrollbar-color: var(--toolbarbutton-active-background) transparent;
+    /* scrollbar-color: var(--toolbarbutton-active-background) transparent; */
     scroll-snap-type: y mandatory !important;
     scroll-snap-stop: always !important;
 }
@@ -59,7 +59,7 @@
     font: var(--paxmod-font) !important;
     width: var(--paxmod-tab-size) !important;
     min-width: var(--paxmod-min-tab-size) !important;
-    max-width: var(--paxmod-max-tab-size) !important;
+    /* max-width: var(--paxmod-max-tab-size) !important; */
     /* Explicit min-height rule is only needed for non-Proton UI */
     min-height: var(--tab-min-height) !important;
     flex-grow: 1;
@@ -119,13 +119,13 @@
 
 :root[tabsintitlebar] #titlebar .titlebar-buttonbox-container {
     /* Give users an option to hide the min/max/close buttions */
-    display: var(--paxmod-titlebar-display);
+    /* display: var(--paxmod-titlebar-display); */
 }
 
 :root[tabsintitlebar] #titlebar .titlebar-buttonbox {
     /* Otherwise, the inline min/max/close buttons on Windows (and maybe MacOS)
      * will stretch to the full height of multiple tab rows */
-    display: inline-block;
+    /* display: inline-block; */
 }
 
 .titlebar-spacer[type="post-tabs"],

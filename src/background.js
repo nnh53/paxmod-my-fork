@@ -5,23 +5,24 @@ import w3color from './w3color.js';
 const NS_XHTML = 'http://www.w3.org/1999/xhtml';
 const globalSheet = browser.runtime.getURL('browser.css');
 export let defaultOptions = {
-  enableIconColors: true,
-  displayNewtab: false,
-  displayTitlebar: true,
-  displayPlaceholders: false,
   displayCloseButton: false,
-  forceCompact: true,
-  font: '',
-  tabSize: 10,
-  minTabSize: 150,
-  maxTabSize: 300,
-  minTabHeight: 29,
-  maxTabRows: 99,
-  minLightness: 59,
-  maxLightness: 100,
+  displayNewtab: false,
+  displayPlaceholders: false,
+  displayTitlebar: false,
+  enableIconColors: true,
   fitLightness: true,
+  font: '',
+  forceCompact: true,
+  maxLightness: 100,
+  maxTabRows: 3,
+  maxTabSize: 300,
+  minLightness: 59,
+  minTabHeight: 27,
+  minTabSize: 120,
+  tabSize: 3,
   userCSS: '',
-  userCSSCode: '',
+  userCSSCode: ''
+  // userCSSCode: ":root{\n  --multirow-n-rows: 3; \n  --multirow-tab-min-width: 100px;\n  --multirow-tab-dynamic-width: 1; \n  --tab-min-height: 32px !important ;\n  --tab-block-margin: 0px !important;\n}\n\n#tabbrowser-tabs{\n  min-height: unset !important;\n  padding-inline-start: 0px !important;\n  padding-inline: 0 !important;\n}\n\n@-moz-document url(chrome://browser/content/browser.xhtml){\n  #scrollbutton-up~spacer,\n  #scrollbutton-up,\n  #scrollbutton-down{ display: var(--scrollbutton-display-model,initial) }\n\n  scrollbox[part][orient=\"horizontal\"]{\n    display: flex;\n    flex-wrap: wrap;\n    overflow-y: auto;\n    max-height: calc((var(--tab-min-height) + 2 * var(--tab-block-margin,0px)) * var(--multirow-n-rows));\n    scrollbar-color: currentColor transparent;\n    scrollbar-width: thin;\n    scroll-snap-type: y mandatory;\n    scrollbar-gutter: stable;\n    scroll-snap-stop: always !important;\n  }\n}\n\n.scrollbox-clip[orient=\"horizontal\"],\n#tabbrowser-arrowscrollbox{\n  overflow: -moz-hidden-unscrollable;\n  display: inline;\n  --scrollbutton-display-model: none;\n}\n\n\n\n/* .tabbrowser-tab */ /********** Single tab **********/\n.tabbrowser-tab{ scroll-snap-align: start; }\n\n#tabbrowser-tabs .tabbrowser-tab[pinned]{\n  position: static !important;\n  margin-inline-start: 0px !important;\n}\n\n.tabbrowser-tab[fadein]:not([pinned]){\n  min-width: var(--multirow-tab-min-width) !important;\n  flex-grow: var(--multirow-tab-dynamic-width) !important;\n}\n\n.tabbrowser-tab > stack{ width: 100%; height: 100% }\n\n#tabs-newtab-button{ margin-bottom: 0 !important; }\n\n#tabbrowser-tabs[hasadjacentnewtabbutton][overflow] > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button {\n  display: flex !important;\n}\n\n#alltabs-button,\n:root:not([customizing]) #TabsToolbar #new-tab-button,\n#tabbrowser-arrowscrollbox > spacer,\n.tabbrowser-tab::after{ display: none !important }\n\n@media (-moz-bool-pref: \"userchrome.multirowtabs.full-width-tabs.enabled\"){\n  .tabbrowser-tab[fadein]:not([pinned]){ max-width: 100vw !important; }\n}\n@media (-moz-bool-pref: \"userchrome.multirowtabs.scrollbar-handle.enabled\"){\n  #tabbrowser-arrowscrollbox{ -moz-window-dragging: no-drag }\n}\n\n#TabsToolbar #tabs-newtab-button {\n  margin: 0 !important;\n  display: none !important;\n  align-self: flex-end;\n  /* In some configurations the button may be hidden */\n  visibility: visible !important;\n}",
 };
 
 let cachedOptions = {};
@@ -65,6 +66,8 @@ function makeDynamicSheet(options) {
 
   // CSS rules are base64-encoded because the native StyleSheetService API
   // can't handle some special chars.
+  console.log('RULE:');
+  console.log(rules);
   return `data:text/css;base64,${btoa(rules)}`;
 }
 
