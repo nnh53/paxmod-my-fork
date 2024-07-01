@@ -10,16 +10,19 @@ See the above repository for updates as well as full license text. */
  * userchrome.multirowtabs.full-width-tabs.enabled  - make tabs grow horizontally to fill all available space
  * userchrome.multirowtabs.scrollbar-handle.enabled - make scrollbar in tabs box respond to mouse, makes it imposiible to drag window from empty space in tabs box */
 
- :root{
-  --multirow-n-rows: 3; 
-  --multirow-tab-min-width: 120px;
-  --multirow-tab-dynamic-width: 1; 
-  --tab-min-height: 27px !important ;
+:root {
+  --multirow-n-rows: 3;
+  --multirow-tab-min-width: 230px;
+  --tab-max-height: 300px;
+  --multirow-tab-dynamic-width: 1;
+  --tab-min-height: 32px !important ;
   --tab-block-margin: 0px !important;
   /* --proton-tab-block-margin: 0; */
-  
 }
-
+.toolbar-items {
+  align-items: start !important;
+  align-self: start !important;
+}
 /* #navigator-toolbox {   
   --paxmod-tab-size: 10%;
   --paxmod-min-tab-size: 120px;
@@ -32,20 +35,23 @@ See the above repository for updates as well as full license text. */
   --paxmod-display-close-button: none;
 } */
 
-#tabbrowser-tabs{
-  font-size: 14px;  /* this is my own */
+#tabbrowser-tabs {
+  font-size: 17px; /* this is my own */
 }
 
-@-moz-document url(chrome://browser/content/browser.xhtml){
-  #scrollbutton-up~spacer,
+@-moz-document url(chrome://browser/content/browser.xhtml)
+{
+  #scrollbutton-up ~ spacer,
   #scrollbutton-up,
-  #scrollbutton-down{ display: var(--scrollbutton-display-model,initial) }
+  #scrollbutton-down {
+    display: var(--scrollbutton-display-model, initial);
+  }
 
-  scrollbox[part][orient="horizontal"]{
+  scrollbox[part][orient="horizontal"] {
     display: flex;
     flex-wrap: wrap;
     overflow-y: auto;
-    max-height: calc((var(--tab-min-height) * var(--tab-block-margin,0px)) * var(--multirow-n-rows));
+    max-height: calc((var(--tab-min-height) * var(--multirow-n-rows)));
     scrollbar-color: currentColor transparent;
     scrollbar-width: thin;
     /* scrollbar-gutter: stable; */
@@ -58,56 +64,75 @@ See the above repository for updates as well as full license text. */
 }
 
 .scrollbox-clip[orient="horizontal"],
-#tabbrowser-arrowscrollbox{
+#tabbrowser-arrowscrollbox {
   overflow: -moz-hidden-unscrollable;
   display: inline;
   --scrollbutton-display-model: none;
 }
 
-.tabbrowser-tab{ 
-  scroll-snap-align: start; 
-  scroll-margin: var(--tab-min-height) !important; 
+.tabbrowser-tab {
+  scroll-snap-align: start;
+  scroll-margin: var(--tab-min-height) !important;
   min-height: unset !important;
   padding-inline-start: 0px !important;
   padding-inline: 0 !important;
-  /* max-width: 300px !important; */
+  max-width: var(--tab-max-height) !important;
+  padding: 0px !important;
+  margin: 0px !important;
 }
 
-#tabbrowser-tabs .tabbrowser-tab[pinned]{
+#tabbrowser-tabs .tabbrowser-tab[pinned] {
   position: static !important;
   margin-inline-start: 0px !important;
 }
 
-.tabbrowser-tab[fadein]:not([pinned]){
+.tabbrowser-tab[fadein]:not([pinned]) {
   min-width: var(--multirow-tab-min-width) !important;
   flex-grow: var(--multirow-tab-dynamic-width) !important;
 }
 
-.tabbrowser-tab > stack{ width: 100%; height: 100% }
+.tabbrowser-tab > stack {
+  width: 100%;
+  height: 100%;
+}
 
 /* remove bottom margin so it doesn't throw off row height computation */
-#tabs-newtab-button{ margin-bottom: 0 !important; } 
+#tabs-newtab-button {
+  margin-bottom: 0 !important;
+}
 
-#tabbrowser-tabs[hasadjacentnewtabbutton][overflow] > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button {
+#tabbrowser-tabs[hasadjacentnewtabbutton][overflow]
+  > #tabbrowser-arrowscrollbox
+  > #tabbrowser-arrowscrollbox-periphery
+  > #tabs-newtab-button {
   display: flex !important;
 }
 
 #alltabs-button,
 :root:not([customizing]) #TabsToolbar #new-tab-button,
 #tabbrowser-arrowscrollbox > spacer,
-.tabbrowser-tab::after{ display: none !important }
-
-@media (-moz-bool-pref: "userchrome.multirowtabs.full-width-tabs.enabled"){
-  .tabbrowser-tab[fadein]:not([pinned]){ max-width: 100vw !important; }
+.tabbrowser-tab::after {
+  display: none !important;
 }
-@media (-moz-bool-pref: "userchrome.multirowtabs.scrollbar-handle.enabled"){
-  #tabbrowser-arrowscrollbox{ -moz-window-dragging: no-drag }
+
+@media (-moz-bool-pref: "userchrome.multirowtabs.full-width-tabs.enabled") {
+  .tabbrowser-tab[fadein]:not([pinned]) {
+    max-width: 100vw !important;
+  }
+}
+@media (-moz-bool-pref: "userchrome.multirowtabs.scrollbar-handle.enabled") {
+  #tabbrowser-arrowscrollbox {
+    -moz-window-dragging: no-drag;
+  }
 }
 
 /* new shitt */
-.tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
-    margin: 0;
-  }
+.tabbrowser-tab[usercontextid]
+  > .tab-stack
+  > .tab-background
+  > .tab-context-line {
+  margin: 0;
+}
 
 /********** Titlebar **********/
 .titlebar-spacer[type="post-tabs"],
@@ -116,13 +141,12 @@ See the above repository for updates as well as full license text. */
   border: none !important;
 }
 
-
 /********** Tabs **********/
 
 #TabsToolbar #alltabs-button,
 #TabsToolbar #new-tab-button {
-    /* Hide buttons that would appear next to tabs container */
-    display: none !important;
+  /* Hide buttons that would appear next to tabs container */
+  display: none !important;
 }
 
 #TabsToolbar #tabs-newtab-button {
@@ -148,12 +172,16 @@ See the above repository for updates as well as full license text. */
   display: none;
 }
 
-.tabbrowser-tab .tab-icon-stack[indicator-replaces-favicon] > *|*.tab-icon-overlay {
+.tabbrowser-tab
+  .tab-icon-stack[indicator-replaces-favicon]
+  > *|*.tab-icon-overlay {
   /* ...but make the indicator icon (e.g. for playing/muted tab) visible... */
   opacity: 1 !important;
 }
 
-.tabbrowser-tab .tab-icon-stack[indicator-replaces-favicon] > *|*:not(.tab-icon-overlay) {
+.tabbrowser-tab
+  .tab-icon-stack[indicator-replaces-favicon]
+  > *|*:not(.tab-icon-overlay) {
   /* ...and hide the favicon since the indicator overlays it. */
   opacity: 0 !important;
 }
@@ -166,7 +194,10 @@ See the above repository for updates as well as full license text. */
 }
 
 /* Need specific selector here to overrule !important from browser style */
-#titlebar #tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab[pinned] {
+#titlebar
+  #tabbrowser-tabs
+  > #tabbrowser-arrowscrollbox
+  > .tabbrowser-tab[pinned] {
   flex-grow: 0 !important;
   width: initial !important;
   min-width: initial !important;
@@ -183,3 +214,7 @@ See the above repository for updates as well as full license text. */
   display: initial !important;
 }
 
+/* Hide tab close button by default... */
+#tabbrowser-arrowscrollbox-periphery {
+  display: none !important;
+}
